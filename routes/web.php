@@ -17,6 +17,6 @@ Route::get('export', [ 'uses' => 'ExportController@export', 'as' => 'export'] );
 
 /* Actions */
 //Export All Students as CSV
-Route::get('export/attendance', [ 'uses' => 'ExportController@exportStudentsToCSV', 'as' => 'exportAll'] );
+Route::get('export/attendance', [ 'uses' => 'ExportController@exportCourseAttendenceToCSV', 'as' => 'exportAttendance'] );
 //Export Selected Students as CSV
 Route::post('export', [ 'uses' => 'ExportController@exportStudentsToCSV', 'as' => 'exportSelected'] );

@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\ExportCsvHelper;
+use App\Models\Course;
 use App\Models\Students;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Response;
 
 class ExportController extends Controller
 {
@@ -42,9 +42,10 @@ class ExportController extends Controller
         $students = Students::with('course','address')->whereIn('id',$id)->get();
 
         //Columns' names.
-        $columns = array('Name', 'Surname', 'Email', 'Nationality', 'Course', 'University', 'City');
+        $columns = array('Name', 'Surname', 'Email', 'Nationality', 'Course', 'University', 'StudentsCity');
         $data = [];
 
+        //Data creation for columns.
         $row = 0;
         foreach ($students as $student){
             $data[$row] = array(
@@ -59,14 +60,35 @@ class ExportController extends Controller
             $row++;
         }
 
-        return (new ExportCsvHelper($columns,$data))->exportCSV();
+        $csv = (new ExportCsvHelper($columns,$data));
+        // Return CSV if there is no error.
+        return $csv->has_error == false ? $csv->exportCSV() : response()->json($csv->error);
     }
 
     /**
      * Exports the total amount of students that are taking each course to a CSV file
      */
-    public function exporttCourseAttendenceToCSV()
+    public function exportCourseAttendenceToCSV()
     {
+        $courses = Course::withCount('students')->get();
 
+        //Columns' names.
+        $columns = array('CourseID','CourseName', 'StudentCount');
+        $data = [];
+
+        //Data creation for columns.
+        $row = 0;
+        foreach ($courses as $course){
+            $data[$row] = array(
+                $course['id'],
+                $course['course_name'],
+                $course['students_count'],
+            );
+            $row++;
+        }
+
+        $csv = (new ExportCsvHelper($columns,$data));
+        // Return CSV if there is no error.
+        return $csv->has_error == false ? $csv->exportCSV() : response()->json($csv->error);
     }
 }

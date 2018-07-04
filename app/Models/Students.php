@@ -28,7 +28,6 @@ class Students extends Model
     public function address()
     {
 
-        return $this->hasOne('App\Models\StudentAddresses', 'id');
-
+        return $this->hasOne('App\Models\StudentAddresses', 'id','address_id');
     }
 }
