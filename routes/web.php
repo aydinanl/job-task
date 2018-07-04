@@ -14,3 +14,9 @@
 Route::get('', [ 'uses' => 'ExportController@welcome', 'as' => 'home'] );
 Route::get('view', [ 'uses' => 'ExportController@viewStudents', 'as' => 'view'] );
 Route::get('export', [ 'uses' => 'ExportController@export', 'as' => 'export'] );
+
+/* Actions */
+//Export All Students as CSV
+Route::get('export/attendance', [ 'uses' => 'ExportController@exportStudentsToCSV', 'as' => 'exportAll'] );
+//Export Selected Students as CSV
+Route::post('export', [ 'uses' => 'ExportController@exportStudentsToCSV', 'as' => 'exportSelected'] );
